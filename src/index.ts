@@ -24,22 +24,23 @@ class Library {
         const authorInput = document.getElementById('authorInput') as HTMLInputElement;
         const yearInput = document.getElementById('yearInput') as HTMLInputElement;
         const addBtn = document.getElementById('addBtn') as HTMLButtonElement;
-        const booksTable = document.getElementById('booksTable') as HTMLElement;
+        const booksList = document.getElementById('booksList') as HTMLElement;
 
-        if (!bookInput || !authorInput || !yearInput || !addBtn || !booksTable) {
+        if (!bookInput || !authorInput || !yearInput || !addBtn || !booksList) {
             console.error('DOM элементы не найдены!');
             return;
         }
 
-        addBtn.addEventListener('click', () => this.addBook(bookInput, authorInput, yearInput, booksTable));
+        addBtn.addEventListener('click', () => this.addBook(bookInput, authorInput, yearInput, booksList));
         bookInput.addEventListener('keypress', (e: KeyboardEvent) => {
-            if (e.key === 'Enter') this.addBook(bookInput, authorInput, yearInput, booksTable);
+            if (e.key === 'Enter') this.addBook(bookInput, authorInput, yearInput, booksList);
         });
 
-        this.renderTable(booksTable);
+        this.renderTable(booksList);
     }
 
-    private addBook(titleInput: HTMLInputElement, authorInput: HTMLInputElement, yearInput: HTMLInputElement, table: HTMLElement): void {
+    // ✅ ИСПРАВЛЕНО: list вместо table
+    private addBook(titleInput: HTMLInputElement, authorInput: HTMLInputElement, yearInput: HTMLInputElement, list: HTMLElement): void {
         const title = titleInput.value.trim();
         const author = authorInput.value.trim();
         const year = parseInt(yearInput.value) || 0;
@@ -52,7 +53,7 @@ class Library {
         setTimeout(() => {
             const book: Book = { id: this.nextId++, title, author, year };
             this.books.push(book);
-            this.renderTable(table);
+            this.renderTable(list);  // ✅ list вместо table
             titleInput.value = '';
             authorInput.value = '';
             yearInput.value = '';
