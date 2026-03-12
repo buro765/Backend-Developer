@@ -24,22 +24,22 @@ class Library {
         const authorInput = document.getElementById('authorInput') as HTMLInputElement;
         const yearInput = document.getElementById('yearInput') as HTMLInputElement;
         const addBtn = document.getElementById('addBtn') as HTMLButtonElement;
-        const booksList = document.getElementById('booksList') as HTMLElement;
+        const booksTable = document.getElementById('booksTable') as HTMLElement;
 
-        if (!bookInput || !authorInput || !yearInput || !addBtn || !booksList) {
+        if (!bookInput || !authorInput || !yearInput || !addBtn || !booksTable) {
             console.error('DOM элементы не найдены!');
             return;
         }
 
-        addBtn.addEventListener('click', () => this.addBook(bookInput, authorInput, yearInput, booksList));
+        addBtn.addEventListener('click', () => this.addBook(bookInput, authorInput, yearInput, booksTable));
         bookInput.addEventListener('keypress', (e: KeyboardEvent) => {
-            if (e.key === 'Enter') this.addBook(bookInput, authorInput, yearInput, booksList);
+            if (e.key === 'Enter') this.addBook(bookInput, authorInput, yearInput, booksTable);
         });
 
-        this.renderBooks(booksList);
+        this.renderTable(booksTable);
     }
 
-    private addBook(titleInput: HTMLInputElement, authorInput: HTMLInputElement, yearInput: HTMLInputElement, list: HTMLElement): void {
+    private addBook(titleInput: HTMLInputElement, authorInput: HTMLInputElement, yearInput: HTMLInputElement, table: HTMLElement): void {
         const title = titleInput.value.trim();
         const author = authorInput.value.trim();
         const year = parseInt(yearInput.value) || 0;
@@ -52,7 +52,7 @@ class Library {
         setTimeout(() => {
             const book: Book = { id: this.nextId++, title, author, year };
             this.books.push(book);
-            this.renderBooks(list);
+            this.renderTable(table);
             titleInput.value = '';
             authorInput.value = '';
             yearInput.value = '';
@@ -60,20 +60,29 @@ class Library {
         }, 500);
     }
 
-    private renderBooks(list: HTMLElement): void {
-        list.innerHTML = '';
-        this.books.forEach(book => {
-            const div = document.createElement('div');
-            div.className = 'book';
-            div.innerHTML = `
-                <div>
-                    <div class="book-title">📚 ${book.title}</div>
-                    <div class="book-author">${book.author}, ${book.year}</div>
-                </div>
-                <span class="book-id">#${book.id}</span>
-            `;
-            list.appendChild(div);
-        });
+    private renderTable(table: HTMLElement): void {
+        table.innerHTML = `
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Год</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.books.map(book => `
+                        <tr>
+                            <td>${book.id}</td>
+                            <td>📚 ${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.year}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
     }
 }
 
