@@ -1,0 +1,21 @@
+echo '<!DOCTYPE html>
+<html>
+<head>
+    <title>REST API - Трофим Ястребов</title>
+    <style>body{font-family:Arial;padding:20px;}</style>
+</head>
+<body>
+<h1>🚀 Books REST API</h1>
+<p><strong>GitHub:</strong> <a href="https://github.com/buro765/Backend-Developer">Backend-Developer</a></p>
+<h2>📡 API Эндпоинты:</h2>
+<ul>
+    <li><code>GET /books</code> → Список книг</li>
+    <li><code>GET /books/1</code> → Книга #1</li>
+    <li><code>POST /books</code> → Создать</li>
+    <li><code>PUT /books/1</code> → Обновить</li>
+    <li><code>DELETE /books/1</code> → Удалить</li>
+</ul>
+<h2>🧪 Тест в консоли:</h2>
+<pre>fetch("/books").then(r=>r.json()).then(console.log)</pre>
+</body>
+</html>' > index.html
