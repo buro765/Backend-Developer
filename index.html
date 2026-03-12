@@ -5,23 +5,10 @@
     <style>
         body { font-family: monospace; padding: 20px; }
         input, button { margin: 5px; padding: 8px; }
-        .book {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            cursor: pointer;
-        }
-        .book.selected {
-            background: #e0f7fa;
-        }
+        .book { padding: 10px; border-bottom: 1px solid #451515; cursor: pointer; }
+        .book.selected { background: #3d909a; }
         .books-list { margin: 10px 0; }
-        .console {
-            background: #000;
-            color: #0f0;
-            padding: 10px;
-            height: 200px;
-            overflow: auto;
-            font-size: 12px;
-        }
+        .console { background: #000; color: #0f0; padding: 10px; height: 200px; overflow: auto; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -43,9 +30,9 @@
 <div id="books" class="books-list"></div>
 
 <h3>Консоль:</h3>
-<div id="console" class="console" aria-live="polite">Готов...</div>
+<div id="console" class="console">Готов...</div>
 
-<!-- WebStorm теперь видит index.ts -->
-<script type="module" src="./index.ts"></script>
+<!-- 🎯 JSDELIVR CDN - TypeScript автоматически компилируется! -->
+<script src="https://cdn.jsdelivr.net/gh/buro765/Backend-Developer/index.ts"></script>
 </body>
 </html>
