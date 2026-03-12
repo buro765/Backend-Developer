@@ -4,12 +4,8 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc -w",
-    "dev": "nodemon --inspect ./dist/index.js",
-    "build": "tsc",
-    "start": "node dist/index.js"
-
+    "build": "tsc && cp index.html dist/ && cp style.css dist/",
+    "serve": "npx serve dist"
   },
   "private": true,
   "license": "MIT",
@@ -18,10 +14,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.4.0",
-    "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.0.0",
+    "serve": "^14.0.0"
   }
 }
