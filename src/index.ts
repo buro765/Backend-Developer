@@ -3,8 +3,8 @@ const API_BASE = '/api'; // или 'https://ваш-api.onrender.com/api'
 interface Book {
     id: number;
     title: string;
-    author: string | undefined;  // explicit undefined
-    year: number | undefined;    // explicit undefined
+    author?: string | undefined;  // ЯВНО undefined
+    year?: number | undefined;
 }
 
 let books: Book[] = [];
@@ -88,11 +88,11 @@ async function addBook(): Promise<void> {
         return;
     }
 
-    const newBook: Partial<Book> = {
+    const newBook = {
         title,
-        author: authorInput.value.trim() || undefined,
-        year: yearInput.value ? +yearInput.value : undefined
-    };
+        ...(authorInput.value.trim() && { author: authorInput.value.trim() }),
+        ...(yearInput.value && { year: +yearInput.value })
+    } as Partial<Book>;
 
     log('📤 POST /books - Создание...');
 
