@@ -1,92 +1,207 @@
-import express from 'express'
-const app = express()
-const port = 3000
+const API_BASE = '/api'; // или 'https://ваш-api.onrender.com/api'
 
-const jsonBody = express.json()
-app.use(jsonBody)
-
-const db ={
-    books: [
-        {id: 1, title:"Колобок"},
-        {id: 2, title:"Ворона"},
-        {id: 3, title:"ВорХроники"},
-        {id: 4, title:"Оно"}
-    ]
+interface Book {
+    id: number;
+    title: string;
+    author: string | undefined;  // explicit undefined
+    year: number | undefined;    // explicit undefined
 }
-app.get('/', (req, res) => {
-    res.json({ message: 'гет запрос' })  // ← ФИКС 2
-})
 
-app.get('/books', (req, res) => {
-    let VorBooks = db.books;
-    if (req.query.title) {
-        VorBooks = VorBooks
-            .filter(c => c.title.indexOf(req.query.title as string) > -1)
+let books: Book[] = [];
+let selectedBookId: number | null = null;
+
+// DOM элементы
+const booksContainer = document.getElementById('books-container') as HTMLElement;
+const consoleEl = document.getElementById('console') as HTMLElement;
+const titleInput = document.getElementById('title') as HTMLInputElement;
+const authorInput = document.getElementById('author') as HTMLInputElement;
+const yearInput = document.getElementById('year') as HTMLInputElement;
+const addBtn = document.getElementById('addBtn') as HTMLButtonElement;
+const editBtn = document.getElementById('editBtn') as HTMLButtonElement;
+const deleteBtn = document.getElementById('deleteBtn') as HTMLButtonElement;
+
+// Логи консоли
+function log(message: string): void {
+    const time = new Date().toLocaleTimeString('ru-RU');
+    consoleEl.textContent += `${time} | ${message}\n`;
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+    console.log(message);
+}
+
+// Загрузка книг
+async function loadBooks(): Promise<void> {
+    log('📡 GET /books - Загрузка списка...');
+    (document.body as HTMLElement).classList.add('loading');
+
+    try {
+        const response = await fetch(`${API_BASE}/books`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        books = await response.json();
+        renderBooks();
+        log(`✅ Получено книг: ${books.length}`);
+    } catch (error) {
+        log(`❌ Ошибка загрузки: ${(error as Error).message}`);
+    } finally {
+        (document.body as HTMLElement).classList.remove('loading');
     }
+}
 
-    res.json(VorBooks)
-})
-
-app.get('/books/:id', (req, res) => {  // ← ОТДЕЛЬНЫЙ роут!
-
-    const FoundBody = db.books
-        .find(c => c.id === +req.params.id);
-
-    if (!FoundBody) {
-        res.sendStatus(404)
+// Отрисовка списка
+function renderBooks(): void {
+    if (books.length === 0) {
+        booksContainer.innerHTML = '<div class="empty">📚 Нет книг. Добавьте первую!</div>';
         return;
     }
-    res.json(FoundBody)
-})
 
-app.delete('/books/:id', (req, res) => {  // ← ОТДЕЛЬНЫЙ роут!
+    booksContainer.innerHTML = books.map(book => `
+        <div class="book ${selectedBookId === book.id ? 'selected' : ''}" 
+             onclick="selectBook(${book.id})">
+            <strong>${book.title || 'Без названия'}</strong>
+            <span>${book.author || 'Неизвестный'}</span>
+            <span>${book.year || '—'}</span>
+            <button class="btn btn-danger btn-sm" 
+                    onclick="event.stopPropagation(); deleteBook(${book.id})">
+                🗑️
+            </button>
+        </div>
+    `).join('');
+}
 
-    db.books = db.books
-        .filter(c => c.id !== +req.params.id);
+// Выбор книги
+function selectBook(id: number): void {
+    selectedBookId = id;
+    const book = books.find(b => b.id === id);
+    if (book) {
+        titleInput.value = book.title || '';
+        authorInput.value = book.author || '';
+        yearInput.value = book.year?.toString() || '';
+        renderBooks();
+        log(`📖 Выбрана книга: ${book.title}`);
+    }
+}
 
-
-    res.sendStatus(204)
-})
-
-app.post('/books', (req, res) => {
-    // ШАГ 1: Получаем title (с защитой)
-    const title = req.body.title?.trim();
-
-    // ШАГ 2: Проверяем результат
-    if (!title) {  // "", null, undefined
-        return res.status(400).json({ error: 'Название обязательно' });
+// Добавление книги
+async function addBook(): Promise<void> {
+    const title = titleInput.value.trim();
+    if (!title) {
+        log('⚠️ Название обязательно!');
+        return;
     }
 
-    // ШАГ 3: Создаём книгу с ОЧИЩЕННЫМ title
-    const CreaBooks = {
-        id: +(new Date()),
-        title: title  // "Прикол" ← пробелы убраны!
+    const newBook: Partial<Book> = {
+        title,
+        author: authorInput.value.trim() || undefined,
+        year: yearInput.value ? +yearInput.value : undefined
     };
 
-    db.books.push(CreaBooks);
-    res
-        .status(201)
-        .json(CreaBooks);
-})
+    log('📤 POST /books - Создание...');
 
-app.put('/books/:id', (req, res) => {  // ← ОТДЕЛЬНЫЙ роут!
+    try {
+        const response = await fetch(`${API_BASE}/books`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newBook)
+        });
 
-     if (!req.body.title){
-         res.sendStatus(400)
-         return;
-     }
-    const FoundBody = db.books
-        .find(c => c.id === +req.params.id);
+        if (response.ok) {
+            clearForm();
+            await loadBooks();
+            log('✅ Книга добавлена!');
+        } else {
+            const error = await response.json();
+            log(`❌ ${error.error || 'Ошибка сервера'}`);
+        }
+    } catch (error) {
+        log(`❌ ${(error as Error).message}`);
+    }
+}
 
-    if (!FoundBody) {
-        res.sendStatus(404)
+// Редактирование
+async function editBook(): Promise<void> {
+    if (!selectedBookId) {
+        log('⚠️ Выберите книгу!');
         return;
     }
-    FoundBody.title = req.body.title;
 
-    res.json(FoundBody)
-})
+    const title = titleInput.value.trim();
+    if (!title) {
+        log('⚠️ Название обязательно!');
+        return;
+    }
 
-app.listen(port, () => {  // ← Одна }
-    console.log(`Сервер на порту ${port}`)
-})
+    const updatedBook: Partial<Book> = {
+        title,
+        author: authorInput.value.trim() || undefined,
+        year: yearInput.value ? +yearInput.value : undefined
+    };
+
+    log(`📤 PUT /books/${selectedBookId} - Обновление...`);
+
+    try {
+        const response = await fetch(`${API_BASE}/books/${selectedBookId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedBook)
+        });
+
+        if (response.ok) {
+            clearForm();
+            await loadBooks();
+            log('✅ Книга обновлена!');
+        } else {
+            const error = await response.json();
+            log(`❌ ${error.error || 'Ошибка сервера'}`);
+        }
+    } catch (error) {
+        log(`❌ ${(error as Error).message}`);
+    }
+}
+
+// Удаление
+async function deleteBook(id?: number): Promise<void> {
+    const bookId = id || selectedBookId;
+    if (!bookId) {
+        log('⚠️ Выберите книгу!');
+        return;
+    }
+
+    if (!confirm('🗑️ Удалить книгу?')) return;
+
+    log(`🗑️ DELETE /books/${bookId}`);
+
+    try {
+        const response = await fetch(`${API_BASE}/books/${bookId}`, { method: 'DELETE' });
+
+        if (response.status === 204 || response.ok) {
+            clearForm();
+            await loadBooks();
+            log('✅ Книга удалена!');
+        } else {
+            const error = await response.json();
+            log(`❌ ${error.error || 'Не найдена'}`);
+        }
+    } catch (error) {
+        log(`❌ ${(error as Error).message}`);
+    }
+}
+
+// Очистка формы
+function clearForm(): void {
+    titleInput.value = '';
+    authorInput.value = '';
+    yearInput.value = '';
+    selectedBookId = null;
+    renderBooks();
+}
+
+// События кнопок
+addBtn.onclick = addBook;
+editBtn.onclick = editBook;
+deleteBtn.onclick = () => deleteBook();
+
+// Инициализация
+window.addEventListener('load', loadBooks);
+
+// Глобальные функции для onclick в HTML
+(window as any).selectBook = selectBook;
+(window as any).deleteBook = deleteBook;
