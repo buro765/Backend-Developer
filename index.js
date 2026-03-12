@@ -4,9 +4,8 @@ class Library {
         this.books = [
             { id: 1, title: 'Война и мир', author: 'Лев Толстой', year: 1869 },
             { id: 2, title: '1984', author: 'Джордж Оруэлл', year: 1949 },
-            { id: 3, title: 'Преступление и наказание', author: 'Фёдор Достоевский', year: 1866},
-            { id: 4, title: 'Мама дай мне 200р', author: '(с) Трофим', year: 2026}
-
+            { id: 3, title: 'Преступление и наказание', author: 'Фёдор Достоевский', year: 1866 },
+            { id: 4, title: 'Мама дай мне 200р', author: '(с) Трофим', year: 2026 }
         ];
         this.nextId = 4;
         document.addEventListener('DOMContentLoaded', () => {
