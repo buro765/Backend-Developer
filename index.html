@@ -12,20 +12,14 @@
         .input-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
         input{flex:1;min-width:200px;padding:.75rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;color:#fff;font-size:1rem;}
         input::placeholder{color:#9ca3af;}
-        input:focus, input[type="number"]:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1);}
-        button{padding:.75rem 2rem;background:#3b82f6;color:#fff;border:none;border-radius:.5rem;font-weight:500;cursor:pointer;transition:background .2s;font-size:1rem;}
+        input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1);}
+        button{padding:.75rem 2rem;background:#3b82f6;color:#fff;border:none;border-radius:.5rem;font-weight:500;cursor:pointer;transition:background .2s;}
         button:hover{background:#2563eb;}
         .add-button-row{display:flex;justify-content:center;margin-bottom:2rem;}
         .books-table{width:100%;border-collapse:collapse;margin-top:1rem;background:#1f2937;border-radius:.5rem;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
         .books-table th{padding:1rem;font-weight:600;background:#374151;border-bottom:2px solid #4b5563;text-align:left;}
         .books-table td{padding:1rem;border-bottom:1px solid #4b5563;}
-        .books-table tbody tr:hover{background:#374151;transition:background .2s;}
-        .books-table tbody tr:last-child td{border-bottom:none;}
-        @media (max-width: 768px) {
-            .input-row{flex-direction:column;}
-            input{min-width:100%;}
-            .books-table th, .books-table td{padding:.75rem;font-size:.9rem;}
-        }
+        .books-table tbody tr:hover{background:#374151;}
     </style>
 </head>
 <body>
@@ -42,7 +36,8 @@
         <button id="addBtn">➕ Записать книгу</button>
     </div>
 
-    <div id="booksTable"></div>
+    <!-- ✅ КРИТИЧНО: id="booksList" -->
+    <div id="booksList"></div>
 </div>
 
 <script src="index.js" defer></script>
