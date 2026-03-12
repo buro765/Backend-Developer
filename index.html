@@ -9,8 +9,10 @@
         body{font-family:system-ui;background:#111827;color:#fff;min-height:100vh;padding:2rem;}
         .container{max-width:60rem;margin:0 auto;}
         h1{font-size:2.5rem;font-weight:700;margin-bottom:2rem;text-align:center;}
+        .form-group{margin-bottom:1rem;}
         .input-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
-        input{flex:1;min-width:200px;padding:.75rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;color:#fff;font-size:1rem;}
+        label{display:block;margin-bottom:.5rem;font-size:.9rem;color:#9ca3af;}
+        input{flex:1;min-width:200px;padding:.75rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;color:#fff;font-size:1rem;width:100%;}
         input::placeholder{color:#9ca3af;}
         input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1);}
         button{padding:.75rem 2rem;background:#3b82f6;color:#fff;border:none;border-radius:.5rem;font-weight:500;cursor:pointer;transition:background .2s;}
@@ -27,16 +29,25 @@
     <h1>📚 Библиотека</h1>
 
     <div class="input-row">
-        <input id="bookInput" placeholder="Название книги">
-        <input id="authorInput" placeholder="Автор">
-        <input id="yearInput" type="number" placeholder="Год" min="0">
+        <div class="form-group">
+            <label for="bookInput">Название книги</label>
+            <input id="bookInput" placeholder="Введите название">
+        </div>
+        <div class="form-group">
+            <label for="authorInput">Автор</label>
+            <input id="authorInput" placeholder="Фамилия Имя">
+        </div>
+        <div class="form-group">
+            <label for="yearInput">Год издания</label>
+            <input id="yearInput" type="number" placeholder="Например: 1869" min="0">
+        </div>
     </div>
 
     <div class="add-button-row">
         <button id="addBtn">➕ Записать книгу</button>
     </div>
 
-    <!-- ✅ КРИТИЧНО: id="booksList" -->
+    <!-- ✅ Правильный ID -->
     <div id="booksList"></div>
 </div>
 
