@@ -11,31 +11,45 @@ class Library {
     ];
     private nextId: number = 4;
 
-    private init(): void {
-        const bookInput = document.getElementById('bookInput') as HTMLInputElement;
-        const addBtn = document.getElementById('addBtn') as HTMLButtonElement;
-        const booksList = document.getElementById('booksList') as HTMLElement;
-
-        addBtn.addEventListener('click', () => this.addBook(bookInput, booksList));
-        bookInput.addEventListener('keypress', (e: KeyboardEvent) => {
-            if (e.key === 'Enter') this.addBook(bookInput, booksList);
+    constructor() {
+        document.addEventListener('DOMContentLoaded', () => {
+            this.init();
         });
-
-        this.renderBooks(booksList);
     }
 
-    private async addBook(input: HTMLInputElement, list: HTMLElement): Promise<void> {
+    private init(): void {
+        const bookInput = document.getElementById('bookInput');
+        const addBtn = document.getElementById('addBtn');
+        const booksList = document.getElementById('booksList');
+
+        if (!bookInput || !addBtn || !booksList) {
+            console.error('DOM элементы не найдены!');
+            return;
+        }
+
+        const input = bookInput as HTMLInputElement;
+        const btn = addBtn as HTMLButtonElement;
+        const list = booksList as HTMLElement;
+
+        btn.addEventListener('click', () => this.addBook(input, list));
+        input.addEventListener('keypress', (e: KeyboardEvent) => {
+            if (e.key === 'Enter') this.addBook(input, list);
+        });
+
+        this.renderBooks(list);
+    }
+
+    private addBook(input: HTMLInputElement, list: HTMLElement): void {
         const title = input.value.trim();
         if (!title) return;
 
-        // Симуляция POST запроса на сервер
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        const book: Book = { id: this.nextId++, title };
-        this.books.push(book);
-        this.renderBooks(list);
-        input.value = '';
-        console.log('POST /books:', book);
+        setTimeout(() => {
+            const book: Book = { id: this.nextId++, title };
+            this.books.push(book);
+            this.renderBooks(list);
+            input.value = '';
+            console.log('POST /books:', book);
+        }, 500);
     }
 
     private renderBooks(list: HTMLElement): void {
@@ -43,13 +57,9 @@ class Library {
         this.books.forEach(book => {
             const div = document.createElement('div');
             div.className = 'book';
-            div.innerHTML = `<span class="book-title">📚 ${book.title}</span><span class="book-id">#${book.id}</span>`;
+            div.innerHTML = `<span>📚 ${book.title}</span><span>#${book.id}</span>`;
             list.appendChild(div);
         });
-    }
-
-    constructor() {
-        this.init();
     }
 }
 

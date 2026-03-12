@@ -5,101 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Библиотека</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #111827; color: white;
-            min-height: 100vh; padding: 2rem;
-        }
-        .container { max-width: 42rem; margin: 0 auto; }
-        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center; }
-        .input-group { display: flex; gap: 1rem; margin-bottom: 2rem; }
-        input {
-            flex: 1; padding: 0.75rem;
-            background: #1f2937; border: 1px solid #374151;
-            border-radius: 0.5rem; color: white; font-size: 1rem;
-        }
-        input::placeholder { color: #9ca3af; }
-        input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-        button {
-            padding: 0.75rem 1.5rem; background: #3b82f6; color: white;
-            border: none; border-radius: 0.5rem; font-weight: 500; cursor: pointer;
-            transition: background 0.2s;
-        }
-        button:hover { background: #2563eb; }
-        .book {
-            padding: 1rem; background: #1f2937; border: 1px solid #374151;
-            border-radius: 0.5rem; display: flex; justify-content: space-between;
-            align-items: center; transition: background 0.2s;
-        }
-        .book:hover { background: #374151; }
-        .book-title { font-size: 1.1rem; }
-        .book-id { color: #9ca3af; font-size: 0.875rem; }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:system-ui;background:#111827;color:#fff;min-height:100vh;padding:2rem;}
+        .container{max-width:42rem;margin:0 auto;}
+        h1{font-size:2rem;font-weight:700;margin-bottom:2rem;text-align:center;}
+        .input-group{display:flex;gap:1rem;margin-bottom:2rem;}
+        input{flex:1;padding:.75rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;color:#fff;font-size:1rem;}
+        input::placeholder{color:#9ca3af;}
+        input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1);}
+        button{padding:.75rem 1.5rem;background:#3b82f6;color:#fff;border:none;border-radius:.5rem;font-weight:500;cursor:pointer;transition:background .2s;}
+        button:hover{background:#2563eb;}
+        .book{padding:1rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;display:flex;justify-content:space-between;align-items:center;transition:background .2s;}
+        .book:hover{background:#374151;}
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Библиотека</h1>
-
     <div class="input-group">
-        <input id="bookInput" type="text" placeholder="Имя книги">
+        <input id="bookInput" placeholder="Имя книги">
         <button id="addBtn">Записать</button>
     </div>
-
     <div id="booksList"></div>
 </div>
-
-<script>
-    class Library {
-        constructor() {
-            this.books = [
-                { id: 1, title: 'Война и мир' },
-                { id: 2, title: '1984' },
-                { id: 3, title: 'Преступление и наказание' }
-            ];
-            this.nextId = 4;
-            this.init();
-        }
-
-        init() {
-            const bookInput = document.getElementById('bookInput');
-            const addBtn = document.getElementById('addBtn');
-            const booksList = document.getElementById('booksList');
-
-            addBtn.addEventListener('click', () => this.addBook(bookInput, booksList));
-            bookInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') this.addBook(bookInput, booksList);
-            });
-
-            this.renderBooks(booksList);
-        }
-
-        addBook(input, list) {
-            const title = input.value.trim();
-            if (!title) return;
-
-            // Симуляция POST запроса (500мс задержка)
-            setTimeout(() => {
-                const book = { id: this.nextId++, title };
-                this.books.push(book);
-                this.renderBooks(list);
-                input.value = '';
-                console.log('POST /books:', book);
-            }, 500);
-        }
-
-        renderBooks(list) {
-            list.innerHTML = '';
-            this.books.forEach(book => {
-                const div = document.createElement('div');
-                div.className = 'book';
-                div.innerHTML = `<span class="book-title">📚 ${book.title}</span><span class="book-id">#${book.id}</span>`;
-                list.appendChild(div);
-            });
-        }
-    }
-
-    new Library();
-</script>
+<script src="index.js" defer></script>
 </body>
 </html>
