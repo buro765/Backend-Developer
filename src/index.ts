@@ -39,7 +39,7 @@ class Library {
         this.renderTable(booksList);
     }
 
-    // ✅ ИСПРАВЛЕНО: list вместо table
+    // ✅ ФИКС: list вместо table
     private addBook(titleInput: HTMLInputElement, authorInput: HTMLInputElement, yearInput: HTMLInputElement, list: HTMLElement): void {
         const title = titleInput.value.trim();
         const author = authorInput.value.trim();
@@ -53,7 +53,7 @@ class Library {
         setTimeout(() => {
             const book: Book = { id: this.nextId++, title, author, year };
             this.books.push(book);
-            this.renderTable(list);  // ✅ list вместо table
+            this.renderTable(list);  // ✅ list
             titleInput.value = '';
             authorInput.value = '';
             yearInput.value = '';
@@ -61,8 +61,8 @@ class Library {
         }, 500);
     }
 
-    private renderTable(table: HTMLElement): void {
-        table.innerHTML = `
+    private renderTable(list: HTMLElement): void {  // ✅ list вместо table
+        list.innerHTML = `
             <table class="books-table">
                 <thead>
                     <tr>
@@ -75,7 +75,7 @@ class Library {
                 <tbody>
                     ${this.books.map(book => `
                         <tr>
-                            <td>${book.id}</td>
+                            <td>#${book.id}</td>
                             <td>📚 ${book.title}</td>
                             <td>${book.author}</td>
                             <td>${book.year}</td>
