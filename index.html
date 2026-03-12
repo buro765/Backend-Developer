@@ -5,9 +5,23 @@
     <style>
         body { font-family: monospace; padding: 20px; }
         input, button { margin: 5px; padding: 8px; }
-        .book { padding: 10px; border-bottom: 1px solid #ccc; cursor: pointer; }
-        .book.selected { background: #e0f7fa; }
-        #console { background: #000; color: #0f0; padding: 10px; height: 200px; overflow: auto; font-size: 12px; }
+        .book {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .book.selected {
+            background: #e0f7fa;
+        }
+        .books-list { margin: 10px 0; }
+        .console {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            height: 200px;
+            overflow: auto;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -16,13 +30,10 @@
 <div>
     <label for="title">Название:</label>
     <input id="title" type="text" placeholder="Название *" required>
-
     <label for="author">Автор:</label>
     <input id="author" type="text" placeholder="Автор">
-
     <label for="year">Год:</label>
     <input id="year" type="number" placeholder="Год" min="1800" max="2026">
-
     <button id="addBtn" type="button">POST</button>
     <button id="editBtn" type="button">PUT</button>
     <button id="deleteBtn" type="button">DELETE</button>
@@ -31,9 +42,10 @@
 <h3>GET /books:</h3>
 <div id="books" class="books-list"></div>
 
-<h3>Консоль моя:</h3>
+<h3>Консоль:</h3>
 <div id="console" class="console" aria-live="polite">Готов...</div>
 
-<script src="index.ts"></script>
+<!-- WebStorm теперь видит index.ts -->
+<script type="module" src="./index.ts"></script>
 </body>
 </html>

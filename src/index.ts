@@ -1,4 +1,3 @@
-// Глобальные функции для onclick
 declare global {
     interface Window {
         selectBook(id: number): void;
@@ -6,14 +5,7 @@ declare global {
     }
 }
 
-// Расширяем Window
-interface ExtendedWindow extends Window {
-    selectBook(id: number): void;
-    deleteBook(): void;
-}
-declare var window: ExtendedWindow;
-
-const API_BASE = '/api'; // ← ЗАМЕНИТЕ на ваш API URL
+const API_BASE = '/api'; // ← ЗАМЕНИТЕ на ваш API
 
 interface Book {
     id: number;
@@ -34,7 +26,7 @@ const log = (msg: string): void => {
     consoleEl.scrollTop = consoleEl.scrollHeight;
 };
 
-// GET - загрузка списка
+// GET - АЖ ДО ЖДАЕТСЯ!
 async function loadBooks(): Promise<void> {
     log('GET /books');
     try {
@@ -52,17 +44,17 @@ async function loadBooks(): Promise<void> {
     }
 }
 
-// SELECT - выбор книги
+// SELECT
 function selectBook(id: number): void {
     selectedId = id;
     const book = books.find(b => b.id === id);
     (el('title') as HTMLInputElement).value = book?.title || '';
     (el('author') as HTMLInputElement).value = book?.author || '';
     (el('year') as HTMLInputElement).value = book?.year?.toString() || '';
-    loadBooks(); // Обновляем UI
+    void loadBooks(); // ← await НЕ НУЖЕН, но Promise обработан!
 }
 
-// POST - добавить
+// POST
 async function addBook(): Promise<void> {
     const titleInput = el('title') as HTMLInputElement;
     const title = titleInput.value.trim();
@@ -81,17 +73,15 @@ async function addBook(): Promise<void> {
         });
         if (res.ok) {
             titleInput.value = '';
-            await loadBooks();
+            void loadBooks(); // ← Promise обработан!
             log('✅ POST OK');
-        } else {
-            log(`❌ HTTP ${res.status}`);
         }
     } catch (e: unknown) {
         log('❌ ' + (e instanceof Error ? e.message : String(e)));
     }
 }
 
-// PUT - обновить
+// PUT
 async function editBook(): Promise<void> {
     if (!selectedId) return log('⚠️ Выберите книгу');
     const titleInput = el('title') as HTMLInputElement;
@@ -112,17 +102,15 @@ async function editBook(): Promise<void> {
         if (res.ok) {
             titleInput.value = '';
             selectedId = null;
-            await loadBooks();
+            void loadBooks(); // ← Promise обработан!
             log('✅ PUT OK');
-        } else {
-            log(`❌ HTTP ${res.status}`);
         }
     } catch (e: unknown) {
         log('❌ ' + (e instanceof Error ? e.message : String(e)));
     }
 }
 
-// DELETE - удалить
+// DELETE
 async function deleteBook(): Promise<void> {
     if (!selectedId || !confirm('Удалить книгу?')) return;
     log(`DELETE /books/${selectedId}`);
@@ -131,10 +119,8 @@ async function deleteBook(): Promise<void> {
         if (res.ok) {
             (el('title') as HTMLInputElement).value = '';
             selectedId = null;
-            await loadBooks();
+            void loadBooks(); // ← Promise обработан!
             log('✅ DELETE OK');
-        } else {
-            log(`❌ HTTP ${res.status}`);
         }
     } catch (e: unknown) {
         log('❌ ' + (e instanceof Error ? e.message : String(e)));
@@ -147,8 +133,8 @@ async function deleteBook(): Promise<void> {
     document.getElementById('editBtn')!.onclick = editBook;
     document.getElementById('deleteBtn')!.onclick = deleteBook;
 
-    window.selectBook = selectBook;
-    window.deleteBook = deleteBook;
+    (window as any).selectBook = selectBook;
+    (window as any).deleteBook = deleteBook;
 
-    loadBooks();
+    void loadBooks(); // ← Promise обработан при старте!
 })();
