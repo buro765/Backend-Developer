@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>CRUD</title>
-    <style>body{font-family:monospace;padding:20px;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./src/index.ts" defer></script>
 </head>
-<body>
-<input id="title" placeholder="Название">
-<button onclick="addBook()">POST</button>
-<div id="list"></div>
-<script>
-    const API = 'http://localhost:3000/api';
+<body class="bg-gray-900 text-white min-h-screen p-8">
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">Библиотека</h1>
 
-    async function loadBooks() {
-        const res = await fetch(API + '/books');
-        const books = await res.json();
-        document.getElementById('list').innerHTML =
-            books.map(b => `<div>${b.id}. ${b.title}</div>`).join('');
-    }
+    <div class="mb-8 flex gap-4">
+        <input
+                id="bookInput"
+                type="text"
+                placeholder="Имя книги"
+                class="flex-1 p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <button
+                id="addBtn"
+                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors"
+        >
+            Записать
+        </button>
+    </div>
 
-    async function addBook() {
-        const title = document.getElementById('title').value;
-        await fetch(API + '/books', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({title})
-        });
-        loadBooks();
-    }
-
-    loadBooks();
-</script>
+    <div id="booksList" class="space-y-3">
+        <!-- Книги добавляются динамически -->
+    </div>
+</div>
 </body>
 </html>
