@@ -1,38 +1,34 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <title>CRUD Тестер</title>
-    <style>
-        body { font-family: monospace; padding: 20px; }
-        input, button { margin: 5px; padding: 8px; }
-        .book { padding: 10px; border-bottom: 1px solid #451515; cursor: pointer; }
-        .book.selected { background: #3d909a; }
-        .books-list { margin: 10px 0; }
-        .console { background: #000; color: #0f0; padding: 10px; height: 200px; overflow: auto; font-size: 12px; }
-    </style>
+    <title>CRUD</title>
+    <style>body{font-family:monospace;padding:20px;}</style>
 </head>
 <body>
-<h2>📚 CRUD API Тестер</h2>
+<input id="title" placeholder="Название">
+<button onclick="addBook()">POST</button>
+<div id="list"></div>
+<script>
+    const API = 'http://localhost:3000/api';
 
-<div>
-    <label for="title">Название:</label>
-    <input id="title" type="text" placeholder="Название *" required>
-    <label for="author">Автор:</label>
-    <input id="author" type="text" placeholder="Автор">
-    <label for="year">Год:</label>
-    <input id="year" type="number" placeholder="Год" min="1800" max="2026">
-    <button id="addBtn" type="button">POST</button>
-    <button id="editBtn" type="button">PUT</button>
-    <button id="deleteBtn" type="button">DELETE</button>
-</div>
+    async function loadBooks() {
+        const res = await fetch(API + '/books');
+        const books = await res.json();
+        document.getElementById('list').innerHTML =
+            books.map(b => `<div>${b.id}. ${b.title}</div>`).join('');
+    }
 
-<h3>GET /books:</h3>
-<div id="books" class="books-list"></div>
+    async function addBook() {
+        const title = document.getElementById('title').value;
+        await fetch(API + '/books', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({title})
+        });
+        loadBooks();
+    }
 
-<h3>Консоль:</h3>
-<div id="console" class="console">Готов...</div>
-
-<!-- 🎯 JSDELIVR CDN - TypeScript автоматически компилируется! -->
-<script src="https://cdn.jsdelivr.net/gh/buro765/Backend-Developer@src/index.ts"></script>
+    loadBooks();
+</script>
 </body>
 </html>
