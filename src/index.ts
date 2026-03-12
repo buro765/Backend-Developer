@@ -9,7 +9,8 @@ class Library {
     private books: Book[] = [
         { id: 1, title: 'Война и мир', author: 'Лев Толстой', year: 1869 },
         { id: 2, title: '1984', author: 'Джордж Оруэлл', year: 1949 },
-        { id: 3, title: 'Преступление и наказание', author: 'Фёдор Достоевский', year: 1866 }
+        { id: 3, title: 'Преступление и наказание', author: 'Фёдор Достоевский', year: 1866 },
+        { id: 4, title: 'Мама дай мне 200р', author: '(с) Трофим', year: 2026 }
     ];
     private nextId: number = 4;
 
