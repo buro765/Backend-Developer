@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <title>CRUD Тестер</title>
     <style>
@@ -14,19 +14,25 @@
 <h2>📚 CRUD API Тестер</h2>
 
 <div>
-    <input id="title" placeholder="Название *">
-    <input id="author" placeholder="Автор">
-    <input id="year" type="number" placeholder="Год">
-    <button id="addBtn">POST</button>
-    <button id="editBtn">PUT</button>
-    <button id="deleteBtn">DELETE</button>
+    <label for="title">Название:</label>
+    <input id="title" type="text" placeholder="Название *" required>
+
+    <label for="author">Автор:</label>
+    <input id="author" type="text" placeholder="Автор">
+
+    <label for="year">Год:</label>
+    <input id="year" type="number" placeholder="Год" min="1800" max="2026">
+
+    <button id="addBtn" type="button">POST</button>
+    <button id="editBtn" type="button">PUT</button>
+    <button id="deleteBtn" type="button">DELETE</button>
 </div>
 
 <h3>GET /books:</h3>
-<div id="books"></div>
+<div id="books" class="books-list"></div>
 
 <h3>Консоль:</h3>
-<div id="console">Готов...</div>
+<div id="console" class="console" aria-live="polite">Готов...</div>
 
 <script src="index.ts"></script>
 </body>
