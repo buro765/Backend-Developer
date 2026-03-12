@@ -2,9 +2,9 @@
 class Library {
     constructor() {
         this.books = [
-            { id: 1, title: 'Война и мир' },
-            { id: 2, title: '1984' },
-            { id: 3, title: 'Преступление и наказание' }
+            { id: 1, title: 'Война и мир', author: 'Лев Толстой', year: 1869 },
+            { id: 2, title: '1984', author: 'Джордж Оруэлл', year: 1949 },
+            { id: 3, title: 'Преступление и наказание', author: 'Фёдор Достоевский', year: 1866 }
         ];
         this.nextId = 4;
         document.addEventListener('DOMContentLoaded', () => {
@@ -13,42 +13,63 @@ class Library {
     }
     init() {
         const bookInput = document.getElementById('bookInput');
+        const authorInput = document.getElementById('authorInput');
+        const yearInput = document.getElementById('yearInput');
         const addBtn = document.getElementById('addBtn');
         const booksList = document.getElementById('booksList');
-        if (!bookInput || !addBtn || !booksList) {
+        if (!bookInput || !authorInput || !yearInput || !addBtn || !booksList) {
             console.error('DOM элементы не найдены!');
             return;
         }
-        const input = bookInput;
-        const btn = addBtn;
-        const list = booksList;
-        btn.addEventListener('click', () => this.addBook(input, list));
-        input.addEventListener('keypress', (e) => {
+        addBtn.addEventListener('click', () => this.addBook(bookInput, authorInput, yearInput, booksList));
+        bookInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter')
-                this.addBook(input, list);
+                this.addBook(bookInput, authorInput, yearInput, booksList);
         });
-        this.renderBooks(list);
+        this.renderTable(booksList);
     }
-    addBook(input, list) {
-        const title = input.value.trim();
-        if (!title)
+    // ✅ ФИКС: list вместо table
+    addBook(titleInput, authorInput, yearInput, list) {
+        const title = titleInput.value.trim();
+        const author = authorInput.value.trim();
+        const year = parseInt(yearInput.value) || 0;
+        if (!title || !author || !year) {
+            alert('Заполните все поля: название, автор, год');
             return;
+        }
         setTimeout(() => {
-            const book = { id: this.nextId++, title };
+            const book = { id: this.nextId++, title, author, year };
             this.books.push(book);
-            this.renderBooks(list);
-            input.value = '';
+            this.renderTable(list); // ✅ list
+            titleInput.value = '';
+            authorInput.value = '';
+            yearInput.value = '';
             console.log('POST /books:', book);
         }, 500);
     }
-    renderBooks(list) {
-        list.innerHTML = '';
-        this.books.forEach(book => {
-            const div = document.createElement('div');
-            div.className = 'book';
-            div.innerHTML = `<span>📚 ${book.title}</span><span>#${book.id}</span>`;
-            list.appendChild(div);
-        });
+    renderTable(list) {
+        list.innerHTML = `
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Год</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.books.map(book => `
+                        <tr>
+                            <td>#${book.id}</td>
+                            <td>📚 ${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.year}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
     }
 }
 new Library();
