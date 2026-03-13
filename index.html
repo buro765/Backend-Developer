@@ -7,7 +7,7 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:system-ui;background:#111827;color:#fff;min-height:100vh;padding:2rem;}
-        .container{max-width:80rem;margin:0 auto;} /* Увеличено */
+        .container{max-width:80rem;margin:0 auto;}
         h1{font-size:2.5rem;font-weight:700;margin-bottom:2rem;text-align:center;}
         .input-row{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
         .form-group{flex:1;min-width:200px;}
@@ -15,20 +15,40 @@
         input{padding:.75rem;background:#1f2937;border:1px solid #374151;border-radius:.5rem;color:#fff;font-size:1rem;width:100%;}
         input::placeholder{color:#9ca3af;}
         input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1);}
-        button{padding:.75rem 2rem;background:#3b82f6;color:#fff;border:none;border-radius:.5rem;font-weight:500;cursor:pointer;transition:background .2s;}
-        button:hover{background:#2563eb;}
-        .add-button-row{display:flex;justify-content:center;margin-bottom:2rem;}
 
-        /* ✅ ИСПРАВЛЕННЫЙ CSS для таблицы */
+        /* ✅ ИСПРАВЛЕННЫЕ КНОПКИ ФИКСИРОВАННОГО РАЗМЕРА */
+        button{
+            width:200px;                    /* ← Фиксированная ширина */
+            padding:.75rem 1rem;            /* ← Равномерные отступы */
+            background:#3b82f6;
+            color:#fff;
+            border:none;
+            border-radius:.5rem;
+            font-weight:500;
+            cursor:pointer;
+            transition:background .2s;
+            display:block;
+            margin:0 auto;
+        }
+        button:hover{background:#2563eb;}
+
+        .add-button-row{
+            display:flex;
+            gap:1rem;
+            justify-content:center;
+            margin-bottom:2rem;
+            flex-wrap:wrap;
+        }
+
         .books-table{
             width:100%;
             border-collapse:collapse;
             margin-top:1rem;
             background:#1f2937;
             border-radius:.5rem;
-            overflow:visible; /* ✅ Было hidden */
+            overflow:visible;
             box-shadow:0 4px 6px rgba(0,0,0,0.3);
-            table-layout:auto; /* ✅ Фиксированная ширина */
+            table-layout:auto;
         }
         .books-table th{
             padding:1rem;
@@ -36,12 +56,12 @@
             background:#374151;
             border-bottom:2px solid #4b5563;
             text-align:left;
-            white-space:nowrap; /* ✅ Не переносит заголовки */
+            white-space:nowrap;
         }
         .books-table td{
             padding:1rem;
             border-bottom:1px solid #4b5563;
-            word-break:break-word; /* ✅ Перенос длинных названий */
+            word-break:break-word;
         }
         .books-table tbody tr:hover{background:#374151;transition:background .2s;}
         .books-table tbody tr:last-child td{border-bottom:none;}
@@ -51,9 +71,9 @@
             .form-group{min-width:100%}
             .books-table{font-size:.9rem;}
             .books-table th,.books-table td{padding:.75rem;}
+            .add-button-row{flex-direction:column;align-items:center;}
         }
     </style>
-
 </head>
 <body>
 <div class="container">
@@ -74,11 +94,10 @@
         </div>
     </div>
 
+    <!-- ✅ ДВЕ КНОПКИ ОДИНАКОВОГО РАЗМЕРА -->
     <div class="add-button-row">
-        <button id="addBtn">➕ Записать книгу!</button>
-    </div>
-    <div class="add-button-row">
-        <button id="addtn">➕ Удалить книгу</button>
+        <button id="addBtn">➕ Записать книгу</button>
+        <button id="deleteBtn">➕ Удалить книгу</button>
     </div>
 
     <div id="booksList"></div>
